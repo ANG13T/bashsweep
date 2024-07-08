@@ -16,6 +16,12 @@ options=(
     "Exit"
 )
 
+echo "=============================================================="
+echo "BASH SWEEP (v.0.1r0)"
+echo "Tool for running automated bash clean up commands via crontab"
+echo "By G4LXY (Angelina Tsuboi) angelinatsuboi.com"
+echo "github.com/ANG13T/bashsweep"
+echo "=============================================================="
 
 # Ask for the clean up function
 PS3="Enter your choice: "
@@ -54,9 +60,9 @@ select opt in "${options[@]}"; do
             echo "Invalid Option"
             break
             ;;
+    esac
 
     # STEP 2. Configuration of crontab (optional)
     echo "complete"
-    esac
 done
 
