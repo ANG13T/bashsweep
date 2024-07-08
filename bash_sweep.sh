@@ -31,7 +31,6 @@ echo "By G4LXY (Angelina Tsuboi) angelinatsuboi.com"
 echo "github.com/ANG13T/bashsweep"
 echo "=============================================================="
 
-
 # Functios for configuring cron schedule
 config_crontab() {
     local script_path="$1"
@@ -44,10 +43,12 @@ config_crontab() {
                 [yY])
                     schedule=$(ask_for_cron_schedule)
                     show_cron_details "$schedule" "$script_path"
+                    (crontab -l; echo "$schedule $script_path") | crontab -
                 ;;
                 *)
                     schedule=$(ask_cron_form)
                     show_cron_details "$schedule" "$script_path"
+                    (crontab -l; echo "$schedule $script_path") | crontab -
                 ;;
             esac
         ;;
@@ -61,8 +62,8 @@ config_crontab() {
 ask_for_cron_schedule() {
     read -p "Enter the cron schedule (e.g., '0 2 * * *' for daily at 2 AM): " cron_schedule
     # Validate cron schedule format
-    if [[ ! $cron_schedule =~ ^[0-9*\/,-]+$ ]]; then
-        echo "Invalid cron schedule format. Please enter a valid cron expression."
+   if echo "$cron_schedule" | grep -Eq '^([0-5]?[0-9]|\*)([ \t]+([01]?[0-9]|2[0-3]|\*)([ \t]+([01]?[0-9]|3[01]|\*)([ \t]+([1-9]|1[0-2]|\*)([ \t]+([0-6]|\*)))?)$';  then
+        print "Invalid cron schedule format. Please enter a valid cron expression."
         ask_for_cron_schedule
     fi
     echo cron_schedule
@@ -88,6 +89,7 @@ show_cron_details() {
     echo "Cron job details:"
     echo "Schedule: $cron_schedule"
     echo "Script path: $script_path"
+    echo "Use crontab -l to view cron jobs"
     echo "=============================================================="
 }
 
@@ -95,52 +97,45 @@ show_cron_details() {
 # Ask for the clean up function
 PS3="Enter your choice: "
 select opt in "${options[@]}"; do
+    selected_option="$opt"
     case $REPLY in
         1)  # Prompt user for directory path
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
-            DIR=${DIR_PATH:-"$HOME"}
-
             chmod +x ./scripts/remove_empty_dir.sh
-            ./remove_empty_dir "$DIR"
-            config_crontab "${paths[selected_option]}"
+            ./scripts/remove_empty_dir.sh "$DIR_PATH"
+             config_crontab "${paths[0]}"
             ;;
         2)
             read -rp "Enter the directory to perform operation (default: $HOME): " DIR_PATH
-            DIR=${DIR_PATH:-"$HOME"}
-
-            read -rp "Enter the number of days (default: 30): " DAYS_INPUT
-            # Use default value if no input is given
-            DAYS=${DAYS_INPUT:-30}
-
+            read -rp "Enter the number of days: " DAYS_INPUT
             chmod +x ./scripts/outdated_file_deletion.sh
-            ./outdated_file_deletion "$DIR" "$DAYS"
-            config_crontab "${paths[selected_option]}"
+            ./scripts/outdated_file_deletion.sh "$DIR_PATH" "$DAYS"
+            config_crontab "${paths[1]}"
             ;;
 
         3)  # Prompt user for directory path
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
-
-            DIR=${DIR_PATH:-"$HOME"}
-
             chmod +x ./scripts/outdated_file_deletion.sh
-            ./outdated_file_deletion "$DIR"
+            ./scripts/outdated_file_deletion.sh "$DIR_PATH"
             config_crontab "${paths[selected_option]}"
+            config_crontab "${paths[2]}"
             ;;
 
         4) # Prompt user for directory path
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
-
-            ./temp_delete "$DIR_PATH"
+            ./scripts/temp_delete.sh "$DIR_PATH"
+            config_crontab "${paths[selected_option]}"
+            config_crontab "${paths[3]}"
             ;;
         5) # Prompt user for directory path
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
-
             read -rp "Enter the keyword to search: " SEARCH_STRING
-
-            ./search_files DIR_PATH SEARCH_STRING
+            ./scripts/search_files.sh "$DIR_PATH" "$SEARCH_STRING"
+            config_crontab "${paths[selected_option]}"
+            config_crontab "${paths[4]}"
             ;;
         6)
-            echo "Exiting."
+            echo "Exiting..."
             break
             ;;
         *)
@@ -148,4 +143,3 @@ select opt in "${options[@]}"; do
             ;;
     esac
 done
-

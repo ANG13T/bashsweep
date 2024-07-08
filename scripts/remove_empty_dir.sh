@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DIR=${1}
+DIR_PATH=${1}
+DIR=${DIR_PATH:-"$HOME"}
 
 # Validate directory existence before proceeding
 if [ ! -d "$DIR" ]; then
