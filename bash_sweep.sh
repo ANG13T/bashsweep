@@ -8,7 +8,7 @@
 # Menu options
 options=(
     "Remove Empty Directories"
-    "Option 2"
+    "Remove Files Older than X Days"
     "Option 3"
     "Exit"
 )
@@ -18,14 +18,14 @@ PS3="Enter your choice: "
 select opt in "${options[@]}"; do
     case "$REPLY" in
         1)
-            echo "Removing empty directories..."
             chmod +x ./scripts/remove_empty_dir.sh
             ./scripts/remove_empty_dir.sh
             break
             ;;
         2)
-            echo "Option 2 selected."
-
+            chmod +x ./scripts/outdated_file_deletion.sh
+            ./outdated_file_deletion.sh
+            break
             ;;
         3)
             echo "Option 3 selected."
@@ -36,7 +36,7 @@ select opt in "${options[@]}"; do
             break
             ;;
         *)
-            echo "Invalid option"
+            echo "Invalid Option"
             break
             ;;
     esac

@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Define the directory to organize
-DIR="$HOME/Documents"
+# Prompt user for directory path
+read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
+
+DIR=${DIR_PATH:-"$HOME"}
 
 cd "$DIR" || exit
 
