@@ -1,12 +1,11 @@
 ########################################################################
 # BASH SWEEP (v.0.1r0)
 # Tool for running automated bash clean up commands via crontab
-# By G4LXY (Angelina Tsuboi) angelinatsuboi.com
+# By G4LXY (Angelina Tsuboi: angelinatsuboi.com)
 # github.com/ANG13T/bashsweep
 #########################################################################
 
 # Menu options
-
 options=(
     "Remove Empty Directories"
     "Remove Files Older than X Days"
@@ -14,6 +13,15 @@ options=(
     "Remove Temporary Files"
     "Search Files for Keyword"
     "Exit"
+)
+
+# Script paths
+paths=(
+    ./scripts/remove_empty_dir.sh
+    ./scripts/outdated_file_deletion.sh
+    ./scripts/organize_files_by_extension.sh
+    ./scripts/temp_delete.sh
+    ./scripts/search_files.sh
 )
 
 echo "=============================================================="
@@ -26,16 +34,20 @@ echo "=============================================================="
 
 # Functios for configuring cron schedule
 config_crontab() {
+    local script_path="$1"
+
     read -p "Do you want to configure a crontab? (Y/N): " config_crontab
     case $config_crontab in
         [yY])
             read -p "Do you have a cron schedule? (Y/N): " cron_choice
             case $config_crontab in
                 [yY])
-                    ask_for_cron_schedule
+                    schedule=$(ask_for_cron_schedule)
+                    show_cron_details "$schedule" "$script_path"
                 ;;
                 *)
-                    ask_cron_form
+                    schedule=$(ask_cron_form)
+                    show_cron_details "$schedule" "$script_path"
                 ;;
             esac
         ;;
@@ -82,32 +94,14 @@ show_cron_details() {
 # Ask for the clean up function
 PS3="Enter your choice: "
 select opt in "${options[@]}"; do
-    selected_option=$REPLY
-    case "$REPLY" in
-        1)
-            chmod +x ./scripts/remove_empty_dir.sh
-            ./scripts/remove_empty_dir.sh
-            break
-            ;;
-        2)
-            chmod +x ./scripts/outdated_file_deletion.sh
-            ./outdated_file_deletion.sh
-            break
-            ;;
-        3)
-            chmod +x ./scripts/organize_files_by_extension.sh
-            ./organize_files_by_extension
-            break
-            ;;
-        4)
-            chmod +x ./scripts/temp_delete.sh
-            ./temp_delete
-            break
-            ;;
-        5)
-            chmod +x ./scripts/search_files.sh
-            ./search_files
-            break
+    case $REPLY in
+        1|2|3|4|5)
+            selected_option=$((REPLY - 1))
+            chmod +x "${paths[selected_option]}"
+            "${paths[selected_option]}"
+
+            # STEP 2. Configuration of crontab (optional)
+            config_crontab "${paths[selected_option]}"
             ;;
         6)
             echo "Exiting."
@@ -115,11 +109,7 @@ select opt in "${options[@]}"; do
             ;;
         *)
             echo "Invalid Option"
-            break
             ;;
     esac
-
-    # STEP 2. Configuration of crontab (optional)
-    config_crontab
 done
 
