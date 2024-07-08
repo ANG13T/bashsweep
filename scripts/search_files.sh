@@ -3,6 +3,8 @@
 # Prompt user for directory path
 read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
 
+read -rp "Enter the keyword to search: " SEARCH_STRING
+
 DIR=${DIR_PATH:-"$HOME"}
 
 # Check if the specified directory exists

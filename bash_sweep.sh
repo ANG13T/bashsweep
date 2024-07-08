@@ -23,9 +23,66 @@ echo "By G4LXY (Angelina Tsuboi) angelinatsuboi.com"
 echo "github.com/ANG13T/bashsweep"
 echo "=============================================================="
 
+
+# Functios for configuring cron schedule
+config_crontab() {
+    read -p "Do you want to configure a crontab? (Y/N): " config_crontab
+    case $config_crontab in
+        [yY])
+            read -p "Do you have a cron schedule? (Y/N): " cron_choice
+            case $config_crontab in
+                [yY])
+                    ask_for_cron_schedule
+                ;;
+                *)
+                    ask_cron_form
+                ;;
+            esac
+        ;;
+
+        *)
+            break
+        ;;
+    esac
+}
+
+ask_for_cron_schedule() {
+    read -p "Enter the cron schedule (e.g., '0 2 * * *' for daily at 2 AM): " cron_schedule
+    # Validate cron schedule format
+    if [[ ! $cron_schedule =~ ^[0-9*\/,-]+$ ]]; then
+        echo "Invalid cron schedule format. Please enter a valid cron expression."
+        ask_for_cron_schedule
+    fi
+    echo cron_schedule
+}
+
+ask_cron_form() {
+    echo "Enter cron details..."
+    read -p "Minute (0-59): " minute
+    read -p "Hour (0-23): " hour
+    read -p "Day of month (1-31): " day_month
+    read -p "Month (1-12): " month
+    read -p "Day of week (0-6 with 0=Sunday): " day_week
+    cron_schedule="$minute $hour $day_month $month $day_week"
+    echo cron_schedule
+}
+
+# Show cron job details
+show_cron_details() {
+    local cron_schedule="$1"
+    local script_path="$2"
+
+    echo "=============================================================="
+    echo "Cron job details:"
+    echo "Schedule: $cron_schedule"
+    echo "Script path: $script_path"
+    echo "=============================================================="
+}
+
 # Ask for the clean up function
 PS3="Enter your choice: "
 select opt in "${options[@]}"; do
+    selected_option=$REPLY
     case "$REPLY" in
         1)
             chmod +x ./scripts/remove_empty_dir.sh
@@ -63,6 +120,6 @@ select opt in "${options[@]}"; do
     esac
 
     # STEP 2. Configuration of crontab (optional)
-    echo "complete"
+    config_crontab
 done
 
