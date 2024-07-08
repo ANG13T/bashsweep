@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Prompt user for directory path
-read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
-
-read -rp "Enter the keyword to search: " SEARCH_STRING
-
+# INPUT: DIR + KEYWORD
+DIR_PATH=${1}
 DIR=${DIR_PATH:-"$HOME"}
+SEARCH_STRING=${2}
 
 # Check if the specified directory exists
 if [ ! -d "$DIR" ]; then

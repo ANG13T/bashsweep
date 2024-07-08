@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Prompt user for directory path
-read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
-
-DIR=${DIR_PATH:-"$HOME"}
+DIR=${1}
 
 cd "$DIR" || exit
 

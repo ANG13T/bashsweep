@@ -91,17 +91,53 @@ show_cron_details() {
     echo "=============================================================="
 }
 
+
 # Ask for the clean up function
 PS3="Enter your choice: "
 select opt in "${options[@]}"; do
     case $REPLY in
-        1|2|3|4|5)
-            selected_option=$((REPLY - 1))
-            chmod +x "${paths[selected_option]}"
-            "${paths[selected_option]}"
+        1)  # Prompt user for directory path
+            read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
+            DIR=${DIR_PATH:-"$HOME"}
 
-            # STEP 2. Configuration of crontab (optional)
+            chmod +x ./scripts/remove_empty_dir.sh
+            ./remove_empty_dir "$DIR"
             config_crontab "${paths[selected_option]}"
+            ;;
+        2)
+            read -rp "Enter the directory to perform operation (default: $HOME): " DIR_PATH
+            DIR=${DIR_PATH:-"$HOME"}
+
+            read -rp "Enter the number of days (default: 30): " DAYS_INPUT
+            # Use default value if no input is given
+            DAYS=${DAYS_INPUT:-30}
+
+            chmod +x ./scripts/outdated_file_deletion.sh
+            ./outdated_file_deletion "$DIR" "$DAYS"
+            config_crontab "${paths[selected_option]}"
+            ;;
+
+        3)  # Prompt user for directory path
+            read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
+
+            DIR=${DIR_PATH:-"$HOME"}
+
+            chmod +x ./scripts/outdated_file_deletion.sh
+            ./outdated_file_deletion "$DIR"
+            config_crontab "${paths[selected_option]}"
+            ;;
+
+        4) # Prompt user for directory path
+            read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
+
+            ./temp_delete "$DIR_PATH"
+            ;;
+        5) # Prompt user for directory path
+            read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
+
+            read -rp "Enter the keyword to search: " SEARCH_STRING
+
+            ./search_files DIR_PATH SEARCH_STRING
             ;;
         6)
             echo "Exiting."

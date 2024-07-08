@@ -1,13 +1,7 @@
 #!/bin/bash
 
-read -rp "Enter the directory to perform operation (default: $HOME): " DIR_PATH
-
-DIR=${DIR_PATH:-"$HOME"}
-
-read -rp "Enter the number of days (default: 30): " DAYS_INPUT
-
-# Use default value if no input is given
-DAYS=${DAYS_INPUT:-30}
+DIR=${1}
+DAYS=${2}
 
 # Validate directory existence before proceeding
 if [ ! -d "$DIR" ]; then
