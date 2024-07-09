@@ -1,4 +1,4 @@
-![]()
+![https://github.com/ANG13T/digital_cleaning_shell/blob/main/icon.png?raw=true](https://github.com/ANG13T/digital_cleaning_shell/blob/main/icon.png?raw=true)
 
 # Bash Sweep
 Tool for automating bash cleanup tasks with cron jobs
