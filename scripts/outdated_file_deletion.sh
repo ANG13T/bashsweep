@@ -10,6 +10,10 @@ if [ ! -d "$DIR" ]; then
     exit 1
 fi
 
-find "$DIR" -type f -mtime +$DAYS -exec rm -f {} \;
+if [ "$DAYS" -eq 0 ]; then
+  find "$DIR" -type f -mtime 0 -exec rm -f {} \;
+else
+  find "$DIR" -type f -mtime +$DAYS -exec rm -f {} \;
+fi
 
 echo "Files older than $DAYS days removed from $DIR."

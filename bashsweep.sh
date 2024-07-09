@@ -124,32 +124,33 @@ select opt in "${options[@]}"; do
             ;;
         2)
             read -rp "Enter the directory to perform operation (default: $HOME): " DIR_PATH
-            read -rp "Enter the number of days: " DAYS_INPUT
+            read -rp "Enter the number of days: " DAYS
             chmod +x ./scripts/outdated_file_deletion.sh
             ./scripts/outdated_file_deletion.sh "$DIR_PATH" "$DAYS"
-            config_crontab "${paths[1]}"
+            input="$(generate_path)${paths[1]} $DIR_PATH $DAYS"
+            config_crontab "${input}"
             ;;
 
         3)
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
             chmod +x ./scripts/outdated_file_deletion.sh
             ./scripts/outdated_file_deletion.sh "$DIR_PATH"
-            config_crontab "${paths[selected_option]}"
-            config_crontab "${paths[2]}"
+            input="$(generate_path)${paths[2]} $DIR_PATH"
+            config_crontab "${input}"
             ;;
 
         4)
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
             ./scripts/temp_delete.sh "$DIR_PATH"
-            config_crontab "${paths[selected_option]}"
-            config_crontab "${paths[3]}"
+            input="$(generate_path)${paths[3]} $DIR_PATH"
+            config_crontab "${input}"
             ;;
         5)
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
             read -rp "Enter the keyword to search: " SEARCH_STRING
             ./scripts/search_files.sh "$DIR_PATH" "$SEARCH_STRING"
-            config_crontab "${paths[selected_option]}"
-            config_crontab "${paths[4]}"
+             input="$(generate_path)${paths[4]} $DIR_PATH $SEARCH_STRING"
+            config_crontab "${input}"
             ;;
         6)
             echo "Exiting..."
