@@ -17,7 +17,7 @@ options=(
 
 # Script paths
 paths=(
-    ./scripts/remove_empty_dir.sh
+    scripts/remove_empty_dir.sh
     ./scripts/outdated_file_deletion.sh
     ./scripts/organize_files_by_extension.sh
     ./scripts/temp_delete.sh
@@ -30,10 +30,16 @@ export CRON_SCHEDULE
 
 echo "=============================================================="
 echo "BASH SWEEP (v.0.1r0)"
-echo "Tool for running automated bash clean up commands via crontab"
-echo "By G4LXY (Angelina Tsuboi) angelinatsuboi.com"
+echo "Tool for automating bash cleanup tasks with cron jobs"
+echo "By G4LXY (Angelina Tsuboi: angelinatsuboi.com)"
 echo "github.com/ANG13T/bashsweep"
 echo "=============================================================="
+
+generate_path() {
+    local script_path="$1"
+    DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    echo "$DIR/$script_path"
+}
 
 # Functios for configuring cron schedule
 config_crontab() {
@@ -101,7 +107,6 @@ show_cron_details() {
     echo "=============================================================="
 }
 
-
 # Ask for the clean up function
 PS3="Enter your choice: "
 select opt in "${options[@]}"; do
@@ -111,7 +116,8 @@ select opt in "${options[@]}"; do
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
             chmod +x ./scripts/remove_empty_dir.sh
             ./scripts/remove_empty_dir.sh "$DIR_PATH"
-             config_crontab "${paths[0]}"
+            input="$(generate_path)${paths[0]}"
+            config_crontab "${input}"
             ;;
         2)
             read -rp "Enter the directory to perform operation (default: $HOME): " DIR_PATH
