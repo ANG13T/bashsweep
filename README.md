@@ -1,3 +1,5 @@
+![]()
+
 # Bash Sweep
 Tool for automating bash cleanup tasks with cron jobs
 
@@ -9,6 +11,8 @@ Tool for automating bash cleanup tasks with cron jobs
 - Search Files for Keyword
 
 ### Cron Jobs
+Once you select the clean up function for bashsweep, you will be prompted with a crontab request.
+
 A crontab (aka "cron table") is a configuration file used in Unix-based operating systems to schedule and automate repetitive tasks.
 You can view the cron table by using the command `crontab -l`
 
@@ -39,10 +43,3 @@ bashsweep is open to any contributions. Please fork the repository and make a pu
 If you enjoyed skytrack, please consider [becoming a sponsor](https://github.com/sponsors/ANG13T) or donating on [buymeacoffee](https://www.buymeacoffee.com/angelinatsuboi) in order to fund my future projects.
 
 To check out my other works, visit my [GitHub profile](https://github.com/ANG13T).
-
-
-### Testing
-- All scripts
-- Custom crontab
-- Fix the crontab configuration
-- Finish the graphics

@@ -18,10 +18,10 @@ options=(
 # Script paths
 paths=(
     scripts/remove_empty_dir.sh
-    ./scripts/outdated_file_deletion.sh
-    ./scripts/organize_files_by_extension.sh
-    ./scripts/temp_delete.sh
-    ./scripts/search_files.sh
+    scripts/outdated_file_deletion.sh
+    scripts/organize_files_by_extension.sh
+    scripts/temp_delete.sh
+    scripts/search_files.sh
 )
 
 # Cron Schedule
@@ -49,20 +49,23 @@ config_crontab() {
     case $config_crontab in
         [yY])
             read -p "Do you have a cron schedule? (Y/N): " cron_choice
-            case $config_crontab in
+            case $cron_choice in
                 [yY])
                     CRON_SCHEDULE=$(ask_for_cron_schedule)
                     export CRON_SCHEDULE
                     show_cron_details "$CRON_SCHEDULE" "$script_path"
-                    echo "$CRON_SCHEDULE $script_path"
                     (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab -
                 ;;
-                *)
+                [nN])
                     CRON_SCHEDULE=$(ask_cron_form)
                     export CRON_SCHEDULE
                     show_cron_details "$CRON_SCHEDULE" "$script_path"
                     echo "$CRON_SCHEDULE $script_path"
-                    (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab -
+                    (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab
+                ;;
+                *)
+                    echo "Invalid choice, exiting."
+                    return 1
                 ;;
             esac
         ;;
@@ -84,7 +87,7 @@ ask_for_cron_schedule() {
 }
 
 ask_cron_form() {
-    echo "Enter cron details..."
+    echo "Enter cron details (enter * for "every possible value")..."
     read -p "Minute (0-59): " minute
     read -p "Hour (0-23): " hour
     read -p "Day of month (1-31): " day_month
@@ -116,7 +119,7 @@ select opt in "${options[@]}"; do
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
             chmod +x ./scripts/remove_empty_dir.sh
             ./scripts/remove_empty_dir.sh "$DIR_PATH"
-            input="$(generate_path)${paths[0]}"
+            input="$(generate_path)${paths[0]} $DIR_PATH"
             config_crontab "${input}"
             ;;
         2)
