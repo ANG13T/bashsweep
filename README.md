@@ -1,4 +1,5 @@
 # Bash Sweep
+Tool for automating bash cleanup tasks with crontab scheduling
 
 ### Scripts
 - 
@@ -6,5 +7,17 @@
 ### Crontab Scheduling
 
 ### Contributing
+bashsweep is open to any contributions. Please fork the repository and make a pull request with the features or fixes you want to implement.
 
-### Thank you
+### Support
+If you enjoyed skytrack, please consider [becoming a sponsor](https://github.com/sponsors/ANG13T) or donating on [buymeacoffee](https://www.buymeacoffee.com/angelinatsuboi) in order to fund my future projects.
+
+To check out my other works, visit my [GitHub profile](https://github.com/ANG13T).
+
+
+### Testing
+- All scripts
+- Custom crontab
+- Fix the crontab configuration
+- Finish the graphics
+- Finish the README

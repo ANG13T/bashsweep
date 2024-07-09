@@ -1,6 +1,6 @@
 ########################################################################
 # BASH SWEEP (v.0.1r0)
-# Tool for running automated bash clean up commands via crontab
+# Tool for automating bash cleanup tasks with crontab scheduling
 # By G4LXY (Angelina Tsuboi: angelinatsuboi.com)
 # github.com/ANG13T/bashsweep
 #########################################################################
@@ -24,6 +24,10 @@ paths=(
     ./scripts/search_files.sh
 )
 
+# Cron Schedule
+CRON_SCHEDULE=""
+export CRON_SCHEDULE
+
 echo "=============================================================="
 echo "BASH SWEEP (v.0.1r0)"
 echo "Tool for running automated bash clean up commands via crontab"
@@ -41,14 +45,18 @@ config_crontab() {
             read -p "Do you have a cron schedule? (Y/N): " cron_choice
             case $config_crontab in
                 [yY])
-                    schedule=$(ask_for_cron_schedule)
-                    show_cron_details "$schedule" "$script_path"
-                    (crontab -l; echo "$schedule $script_path") | crontab -
+                    CRON_SCHEDULE=$(ask_for_cron_schedule)
+                    export CRON_SCHEDULE
+                    show_cron_details "$CRON_SCHEDULE" "$script_path"
+                    echo "$CRON_SCHEDULE $script_path"
+                    (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab -
                 ;;
                 *)
-                    schedule=$(ask_cron_form)
-                    show_cron_details "$schedule" "$script_path"
-                    (crontab -l; echo "$schedule $script_path") | crontab -
+                    CRON_SCHEDULE=$(ask_cron_form)
+                    export CRON_SCHEDULE
+                    show_cron_details "$CRON_SCHEDULE" "$script_path"
+                    echo "$CRON_SCHEDULE $script_path"
+                    (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab -
                 ;;
             esac
         ;;
@@ -62,11 +70,11 @@ config_crontab() {
 ask_for_cron_schedule() {
     read -p "Enter the cron schedule (e.g., '0 2 * * *' for daily at 2 AM): " cron_schedule
     # Validate cron schedule format
-   if echo "$cron_schedule" | grep -Eq '^([0-5]?[0-9]|\*)([ \t]+([01]?[0-9]|2[0-3]|\*)([ \t]+([01]?[0-9]|3[01]|\*)([ \t]+([1-9]|1[0-2]|\*)([ \t]+([0-6]|\*)))?)$';  then
+   if echo "$cron_schedule" | grep -Eq '^([0-5]?[0-9]|\*)([ \t]+([01]?[0-9]|2[0-3]|\*)([ \t]+([01]?[0-9]|3[01]|\*)([ \t]+([1-9]|1[0-2]|\*)([ \t]+([0-6]|\*))))$';  then
         print "Invalid cron schedule format. Please enter a valid cron expression."
         ask_for_cron_schedule
     fi
-    echo cron_schedule
+    echo "$cron_schedule"
 }
 
 ask_cron_form() {
@@ -77,7 +85,7 @@ ask_cron_form() {
     read -p "Month (1-12): " month
     read -p "Day of week (0-6 with 0=Sunday): " day_week
     cron_schedule="$minute $hour $day_month $month $day_week"
-    echo cron_schedule
+    echo "$cron_schedule"
 }
 
 # Show cron job details
