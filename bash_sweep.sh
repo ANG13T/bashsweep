@@ -1,6 +1,6 @@
 ########################################################################
 # BASH SWEEP (v.0.1r0)
-# Tool for automating bash cleanup tasks with crontab scheduling
+# Tool for automating bash cleanup tasks with cron jobs
 # By G4LXY (Angelina Tsuboi: angelinatsuboi.com)
 # github.com/ANG13T/bashsweep
 #########################################################################

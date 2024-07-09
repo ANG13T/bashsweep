@@ -1,10 +1,15 @@
 # Bash Sweep
-Tool for automating bash cleanup tasks with crontab scheduling
+Tool for automating bash cleanup tasks with cron jobs
 
 ### Scripts
-- 
+- Remove Empty Directories
+- Remove Files Older than X Days
+- Organize Files by Extension
+- Remove Temporary Files
+- Search Files for Keyword
 
-### Crontab Scheduling
+### Cron Jobs
+
 
 ### Contributing
 bashsweep is open to any contributions. Please fork the repository and make a pull request with the features or fixes you want to implement.
