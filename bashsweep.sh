@@ -54,6 +54,7 @@ config_crontab() {
                     CRON_SCHEDULE=$(ask_for_cron_schedule)
                     export CRON_SCHEDULE
                     show_cron_details "$CRON_SCHEDULE" "$script_path"
+                    echo "$CRON_SCHEDULE $script_path"
                     (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab -
                 ;;
                 [nN])
@@ -61,7 +62,7 @@ config_crontab() {
                     export CRON_SCHEDULE
                     show_cron_details "$CRON_SCHEDULE" "$script_path"
                     echo "$CRON_SCHEDULE $script_path"
-                    (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab
+                    (crontab -l; echo "$CRON_SCHEDULE $script_path") | crontab -
                 ;;
                 *)
                     echo "Invalid choice, exiting."
@@ -87,7 +88,6 @@ ask_for_cron_schedule() {
 }
 
 ask_cron_form() {
-    echo "Enter cron details (enter * for "every possible value")..."
     read -p "Minute (0-59): " minute
     read -p "Hour (0-23): " hour
     read -p "Day of month (1-31): " day_month
@@ -115,7 +115,7 @@ PS3="Enter your choice: "
 select opt in "${options[@]}"; do
     selected_option="$opt"
     case $REPLY in
-        1)  # Prompt user for directory path
+        1)
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
             chmod +x ./scripts/remove_empty_dir.sh
             ./scripts/remove_empty_dir.sh "$DIR_PATH"
@@ -130,7 +130,7 @@ select opt in "${options[@]}"; do
             config_crontab "${paths[1]}"
             ;;
 
-        3)  # Prompt user for directory path
+        3)
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
             chmod +x ./scripts/outdated_file_deletion.sh
             ./scripts/outdated_file_deletion.sh "$DIR_PATH"
@@ -138,13 +138,13 @@ select opt in "${options[@]}"; do
             config_crontab "${paths[2]}"
             ;;
 
-        4) # Prompt user for directory path
+        4)
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
             ./scripts/temp_delete.sh "$DIR_PATH"
             config_crontab "${paths[selected_option]}"
             config_crontab "${paths[3]}"
             ;;
-        5) # Prompt user for directory path
+        5)
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
             read -rp "Enter the keyword to search: " SEARCH_STRING
             ./scripts/search_files.sh "$DIR_PATH" "$SEARCH_STRING"
