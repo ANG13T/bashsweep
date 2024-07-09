@@ -133,14 +133,15 @@ select opt in "${options[@]}"; do
 
         3)
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
-            chmod +x ./scripts/outdated_file_deletion.sh
-            ./scripts/outdated_file_deletion.sh "$DIR_PATH"
+            chmod +x ./scripts/organize_files_by_extension.sh
+            ./scripts/organize_files_by_extension.sh "$DIR_PATH"
             input="$(generate_path)${paths[2]} $DIR_PATH"
             config_crontab "${input}"
             ;;
 
         4)
             read -rp "Enter the directory path to clean (default: $HOME): " DIR_PATH
+            chmod +x ./scripts/temp_delete.sh
             ./scripts/temp_delete.sh "$DIR_PATH"
             input="$(generate_path)${paths[3]} $DIR_PATH"
             config_crontab "${input}"
@@ -148,6 +149,7 @@ select opt in "${options[@]}"; do
         5)
             read -rp "Enter the directory path to organize (default: $HOME): " DIR_PATH
             read -rp "Enter the keyword to search: " SEARCH_STRING
+            chmod +x ./scripts/search_files.sh
             ./scripts/search_files.sh "$DIR_PATH" "$SEARCH_STRING"
              input="$(generate_path)${paths[4]} $DIR_PATH $SEARCH_STRING"
             config_crontab "${input}"

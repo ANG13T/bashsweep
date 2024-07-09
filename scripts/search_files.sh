@@ -11,6 +11,8 @@ if [ ! -d "$DIR" ]; then
     exit 1
 fi
 
+echo "Searching for $SEARCH_STRING..."
+
 # Find and list files containing the search string
 grep -rl "$SEARCH_STRING" "$DIR"
 
