@@ -10,6 +10,12 @@ Tool for automating bash cleanup tasks with cron jobs
 - Remove Temporary Files
 - Search Files for Keyword
 
+### Usage
+```
+chmod +x bashsweep.sh
+./bashsweep
+```
+
 ### Cron Jobs
 Once you select the clean up function for bashsweep, you will be prompted with a crontab request.
 
