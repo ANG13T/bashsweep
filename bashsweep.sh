@@ -1,4 +1,4 @@
-########################################################################
+##0######################################################################
 # BASH SWEEP (v.0.1r0)
 # Tool for automating bash cleanup tasks with cron jobs
 # By G4LXY (Angelina Tsuboi: angelinatsuboi.com)
@@ -12,6 +12,7 @@ options=(
     "Organize Files by Extension"
     "Remove Temporary Files"
     "Search Files for Keyword"
+    "Share File"
     "Exit"
 )
 
@@ -22,6 +23,7 @@ paths=(
     scripts/organize_files_by_extension.sh
     scripts/temp_delete.sh
     scripts/search_files.sh
+    scripts/share_file.sh
 )
 
 # Cron Schedule
@@ -154,7 +156,10 @@ select opt in "${options[@]}"; do
              input="$(generate_path)${paths[4]} $DIR_PATH $SEARCH_STRING"
             config_crontab "${input}"
             ;;
-        6)
+        6) 	chmod +x ./scripts/share_file.sh
+		./scripts/share_file.sh
+	    ;;
+	7)
             echo "Exiting..."
             break
             ;;
